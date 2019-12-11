@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Go WebSocket Tutorial</title>
+</head>
+<body>
+<h1>My Webapp </h1>
+
+<div id="ws-log-msg"></div>
+
+<input type="text" id="test"  value="" /> <button onclick="submitMe(document.getElementById('test').value)" id="testButton" >Submit Response</button>
+
+<script>
+    const connString = "ws://127.0.0.1:8080/ws";
+
+    let socket = new WebSocket(connString);
+    console.log("Attempting Connection...");
+
+    socket.onopen = () => {
+        console.log("Successfully Connected");
+        wsSendMessage("Hi! My name is Web Client!")
+    };
+
+    socket.onmessage = (msg) => {
+        document.getElementById('ws-log-msg').innerHTML += `<p><b>${new Date().toLocaleString()}</b> ${msg.data}</p>`;
+        console.log("New message received:", msg);
+    };
+
+    socket.onclose = event => {
+        console.log("Socket Closed Connection: ", event);
+    };
+
+    socket.onerror = error => {
+        console.log("Socket Error: ", error);
+    };
+
+    function wsSendMessage(msg) {
+        socket.send(msg)
+    }
+
+</script>
+</body>
+</html>
